@@ -105,12 +105,18 @@ def cmd_routes(args, api_key):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="seats.aero Partner API client")
-    parser.add_argument("--api-key", default=os.environ.get("SEATS_AERO_API_KEY"))
-    parser.add_argument("--pretty", action="store_true", help="pretty-print JSON output")
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument("--api-key", default=os.environ.get("SEATS_AERO_API_KEY"))
+    common.add_argument("--pretty", action="store_true", help="pretty-print JSON output")
+
+    parser = argparse.ArgumentParser(
+        description="seats.aero Partner API client", parents=[common]
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
-    p_search = sub.add_parser("search", help="cached search across a date range")
+    p_search = sub.add_parser(
+        "search", help="cached search across a date range", parents=[common]
+    )
     p_search.add_argument("--origin", required=True, help="e.g. JFK or JFK,EWR")
     p_search.add_argument("--dest", required=True, help="e.g. NRT or NRT,HND")
     p_search.add_argument("--cabin", default="Y,W,J,F", help="comma list of Y,W,J,F")
@@ -121,7 +127,9 @@ def main():
     p_search.add_argument("--take", type=int, default=500)
     p_search.add_argument("--max-pages", type=int, default=4)
 
-    p_avail = sub.add_parser("availability", help="bulk availability for one program")
+    p_avail = sub.add_parser(
+        "availability", help="bulk availability for one program", parents=[common]
+    )
     p_avail.add_argument("--source", required=True, help="e.g. united, aeroplan, virginatlantic")
     p_avail.add_argument("--origin-region", default=None)
     p_avail.add_argument("--dest-region", default=None)
@@ -129,10 +137,14 @@ def main():
     p_avail.add_argument("--end", default=None)
     p_avail.add_argument("--cabin", default=None)
 
-    p_trip = sub.add_parser("trip", help="full trip detail for an AvailabilityID")
+    p_trip = sub.add_parser(
+        "trip", help="full trip detail for an AvailabilityID", parents=[common]
+    )
     p_trip.add_argument("--id", required=True)
 
-    p_routes = sub.add_parser("routes", help="routes tracked for a mileage program")
+    p_routes = sub.add_parser(
+        "routes", help="routes tracked for a mileage program", parents=[common]
+    )
     p_routes.add_argument("--source", required=True)
 
     args = parser.parse_args()

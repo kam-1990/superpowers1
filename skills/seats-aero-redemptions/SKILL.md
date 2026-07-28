@@ -21,6 +21,13 @@ good deal for that user's miles.
 
 ## Setup
 
+**Note:** this script needs outbound HTTPS to `seats.aero`. Sandboxed
+environments with restrictive egress allowlists (including some Claude Code
+remote sessions) may block that host entirely — if `search`/`trip`/etc. fail
+with a proxy `403`/`CONNECT` error rather than a seats.aero error, that's a
+network policy issue, not a bug in this script. Run it somewhere with normal
+internet access if you hit that.
+
 The script needs an API key in `SEATS_AERO_API_KEY`:
 
 ```bash
